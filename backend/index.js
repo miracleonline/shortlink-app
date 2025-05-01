@@ -8,16 +8,11 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // Parse requests in JSON format
 
+// API route
 app.use('/api', urlRoutes);
 
-// Redirect to original URL
-app.get('/:shortId', (req, res) => {
-  const { shortId } = req.params;
-  const entry = urlRoutes.urlDatabase?.get(shortId);
-  
-  entry.visits += 1;
-  res.redirect(entry.longUrl);
-});
+// Redirect route
+app.use('/', urlRoutes);
 
 // PORT setup
 app.listen(5000, () => {
