@@ -31,10 +31,18 @@ router.post('/encode', (req, res) => {
 
 router.post('/decode', (req, res) => {
   // Decode logic
-  const { shortId } = req.body;
+  const { shortUrl } = req.body;
+  
+  if (!shortUrl || typeof shortUrl !== 'string') {
+    return res.status(400).json({ error: 'Invalid URL format' });
+  }
 
-  if (!shortId || typeof shortId !== 'string') {
-    return res.status(400).json({ error: 'Short ID required' });
+  // Extract shortId from the full short URL
+  const urlParts = shortUrl.split('/');
+  const shortId = urlParts[urlParts.length - 1];
+
+  if (!shortId) {
+    return res.status(400).json({ error: 'Short ID missing from URL' });
   }
 
   const entry = urlDatabase.get(shortId);
