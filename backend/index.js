@@ -2,6 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 const urlRoutes = require('./routes/urlRoutes');
+const redirectRoutes = require('./routes/redirectRoutes');
 
 // App setup
 const app = express();
@@ -12,7 +13,7 @@ app.use(express.json()); // Parse requests in JSON format
 app.use('/api', urlRoutes);
 
 // Redirect route
-app.use('/', urlRoutes);
+app.use('/', redirectRoutes);
 
 // PORT setup
 app.listen(5000, () => {

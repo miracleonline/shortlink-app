@@ -4,14 +4,13 @@ const router = express.Router();
 const {
   encode,
   decode,
-  redirect
+  listUrls
 } = require('../controllers/urlController');
 
 // API endpoints
 router.post('/encode', encode);
 router.post('/decode', decode);
+router.get('/list', listUrls);
 
-// Redirect endpoint (ONLY DEFINED)
-router.get('/:shortId', redirect);
 
 module.exports = router;

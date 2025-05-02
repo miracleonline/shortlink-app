@@ -51,6 +51,7 @@ exports.decode = (req, res) => {
 };
 
 
+// Redirect Logic
 exports.redirect = (req, res) => {
   const { shortId } = req.params;
   const entry = urlDatabase.get(shortId);
@@ -62,3 +63,21 @@ exports.redirect = (req, res) => {
   entry.visits += 1;
   res.redirect(entry.longUrl);
 };
+
+// Listing Logic
+exports.listUrls = (req, res) => {
+  const results = [];
+
+  urlDatabase.forEach((value, key) => {
+    results.push({
+      shortId: key,
+      longUrl: value.longUrl,
+      createdAt: value.createdAt,
+      visits: value.visits,
+      shortUrl: `${BASE_URL}/${key}`, // use BASE_URL
+    });
+  });
+
+  res.json(results);
+};
+
