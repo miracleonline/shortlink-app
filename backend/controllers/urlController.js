@@ -21,6 +21,7 @@ exports.encode = (req, res) => {
     longUrl,
     createdAt: new Date().toISOString(),
     visits: 0,
+    visitLogs: []
   });
 
   res.json({ shortUrl, shortId });
@@ -60,7 +61,15 @@ exports.redirect = (req, res) => {
     return res.status(404).send('URL not found');
   }
 
+  const userAgent = req.headers['user-agent'] || 'Unknown';
+
+  // Increment visit and log browser info
   entry.visits += 1;
+  entry.visitLogs.push({
+    timestamp: new Date().toISOString(),
+    browser: userAgent
+  });
+
   res.redirect(entry.longUrl);
 };
 
@@ -75,6 +84,7 @@ exports.listUrls = (req, res) => {
       createdAt: value.createdAt,
       visits: value.visits,
       shortUrl: `${BASE_URL}/${key}`, // use BASE_URL
+      visitLogs: value.visitLogs
     });
   });
 
