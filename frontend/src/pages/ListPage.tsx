@@ -16,14 +16,21 @@ const ListPage = () => {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/list').then(res => {
-      setData(res.data);
-    });
-  }, []);
+    const fetchData = async () => {
+      try {
+        const endpoint = search
+          ? `http://localhost:5000/api/search?query=${encodeURIComponent(search)}`
+          : 'http://localhost:5000/api/list';
 
-  const filtered = data.filter(entry =>
-    entry.longUrl.toLowerCase().includes(search.toLowerCase())
-  );
+        const res = await axios.get(endpoint);
+        setData(res.data);
+      } catch (err) {
+        setData([]);
+      }
+    };
+
+    fetchData();
+  }, [search]);
 
   return (
     <div>
@@ -35,7 +42,7 @@ const ListPage = () => {
         onChange={e => setSearch(e.target.value)}
       />
       <ul>
-        {filtered.map(entry => (
+        {data.map(entry => (
           <li key={entry.shortId}>
             <a href={entry.shortUrl} target="_blank" rel="noopener noreferrer">{entry.shortUrl}</a>
             <div>Original: {entry.longUrl}</div>

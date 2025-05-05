@@ -81,3 +81,49 @@ exports.listUrls = (req, res) => {
   res.json(results);
 };
 
+// Search logic
+exports.searchUrls = (req, res) => {
+  const { query } = req.query;
+
+  if (!query) {
+    return res.status(400).json({ error: 'Search query is required' });
+  }
+
+  const results = [];
+  urlDatabase.forEach((value, key) => {
+    if (value.longUrl.includes(query) || key.includes(query)) {
+      results.push({
+        shortId: key,
+        longUrl: value.longUrl,
+        createdAt: value.createdAt,
+        visits: value.visits,
+        shortUrl: `${BASE_URL}/${key}`,
+      });
+    }
+  });
+
+  if (results.length === 0) {
+    return res.status(404).json({ message: 'No matching URLs found' });
+  }
+
+  res.json(results);
+};
+
+// Statistics logic
+exports.getUrlStats = (req, res) => {
+  const { shortId } = req.params;
+
+  const entry = urlDatabase.get(shortId);
+
+  if (!entry) {
+    return res.status(404).json({ error: 'Short URL not found' });
+  }
+
+  res.json({
+    shortId,
+    longUrl: entry.longUrl,
+    visits: entry.visits,
+    createdAt: entry.createdAt,
+  });
+};
+
