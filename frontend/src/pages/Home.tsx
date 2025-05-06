@@ -1,13 +1,45 @@
 // Imports
+import { Box, Typography, Container, useMediaQuery } from '@mui/material';
 import ShortenForm from '../components/ShortenForm';
-
+import { useTheme } from '@mui/material/styles';
 
 const Home = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
-    <div>
-      <h1>ShortLink</h1>
-      <ShortenForm />
-    </div>
+    <Container maxWidth="lg">
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '80vh',
+          textAlign: 'center',
+          ml: { md: '240px' },
+        }}
+      >
+        <Typography
+          variant={isMobile ? 'h4' : 'h2'}
+          component="h1"
+          fontWeight="bold"
+          gutterBottom
+        >
+          ShortLink
+        </Typography>
+        <Typography
+          variant="subtitle1"
+          color="textSecondary"
+          sx={{ maxWidth: 600 }}
+        >
+          Indicina ShortLink: shorten your long URLs into clean short links.
+        </Typography>
+        <Box sx={{ width: '100%', maxWidth: 600 }}>
+          <ShortenForm />
+        </Box>
+      </Box>
+    </Container>
   );
 };
 

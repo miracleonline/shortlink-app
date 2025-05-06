@@ -1,5 +1,10 @@
+// Imports
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import {
+  Box, Grid, Card, CardContent, Typography, TextField, Button, Modal
+} from '@mui/material';
+
 
 // Visit Log Type safety
 interface VisitLog {
@@ -22,6 +27,7 @@ const ListPage = () => {
   const [data, setData] = useState<UrlEntry[]>([]);
   const [search, setSearch] = useState('');
   const [decodedUrl, setDecodedUrl] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,42 +50,72 @@ const ListPage = () => {
     try {
       const res = await axios.post('http://localhost:5000/api/decode', { shortUrl });
       setDecodedUrl(res.data.longUrl);
-      alert(`Decoded URL: ${res.data.longUrl}`);
+      setOpen(true);
     } catch (err) {
-      alert('Failed to decode URL');
+      setDecodedUrl('Failed to decode URL');
+      setOpen(true);
     }
   };
 
   return (
-    <div>
-      <h2>All Shortened URLs</h2>
-      <input
-        type="text"
-        placeholder="Search long URLs"
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h4" gutterBottom>All Shortened URLs</Typography>
+      <TextField
+        fullWidth
+        variant="outlined"
+        label="Search URLs"
         value={search}
-        onChange={e => setSearch(e.target.value)}
+        onChange={(e) => setSearch(e.target.value)}
+        sx={{ mb: 3 }}
       />
-      <ul>
-        {data.map(entry => (
-          <li key={entry.shortId}>
-            <a href={entry.shortUrl} target="_blank" rel="noopener noreferrer">{entry.shortUrl}</a>
-            <div>Original: {entry.longUrl}</div>
-            <div>Created: {new Date(entry.createdAt).toLocaleString()}</div>
-            <div>Visits: {entry.visits}</div>
-            {entry.visitLogs && (
-              <ul>
-                {entry.visitLogs.map((log, idx) => (
-                  <li key={idx}>
-                    {new Date(log.timestamp).toLocaleString()} - {log.browser}
-                  </li>
-                ))}
-              </ul>
-            )}
-            <button onClick={() => decodeUrl(entry.shortUrl)}>Decode</button>
-          </li>
+
+      <Grid container spacing={2}>
+        {data.map((entry) => (
+          <Grid item xs={12} md={6} lg={4} key={entry.shortId}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  <a href={entry.shortUrl} target="_blank" rel="noopener noreferrer">{entry.shortUrl}</a>
+                </Typography>
+                <Typography variant="body2">Original: {entry.longUrl}</Typography>
+                <Typography variant="body2">Created: {new Date(entry.createdAt).toLocaleString()}</Typography>
+                <Typography variant="body2">Visits: {entry.visits}</Typography>
+                {entry.visitLogs && (
+                  <ul>
+                    {entry.visitLogs.map((log, idx) => (
+                      <li key={idx}>
+                        {new Date(log.timestamp).toLocaleString()} - {log.browser}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <Button variant="contained" onClick={() => decodeUrl(entry.shortUrl)}>Decode</Button>
+              </CardContent>
+            </Card>
+          </Grid>
         ))}
-      </ul>
-    </div>
+      </Grid>
+
+      {/* Modal */}
+      <Modal open={open} onClose={() => setOpen(false)}>
+        <Box
+          sx={{
+            p: 4,
+            backgroundColor: 'white',
+            borderRadius: 2,
+            boxShadow: 24,
+            width: 400,
+            mx: 'auto',
+            mt: '15%',
+            textAlign: 'center'
+          }}
+        >
+          <Typography variant="h6">Decoded URL:</Typography>
+          <Typography sx={{ mt: 2 }}>{decodedUrl}</Typography>
+          <Button sx={{ mt: 2 }} onClick={() => setOpen(false)} variant="contained">Close</Button>
+        </Box>
+      </Modal>
+    </Box>
   );
 };
 
