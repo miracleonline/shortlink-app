@@ -1,10 +1,14 @@
 //Imports
-const generateId = require('../utils/generateId');
-const urlDatabase = require('../db');
+const {
+  createShortUrl,
+  findLongUrlFromShort,
+  getRedirectEntry,
+  getAllUrls,
+  searchUrls,
+  getStatsById
+} = require('../services/urlService');
 
-const BASE_URL = 'http://localhost:5000';
-
-// Encode logic
+// Encode 
 exports.encode = (req, res) => {
   const { longUrl } = req.body;
 
@@ -13,21 +17,11 @@ exports.encode = (req, res) => {
     return res.status(400).json({ error: 'Invalid URL' });
   }
 
-  const shortId = generateId();
-  const shortUrl = `${BASE_URL}/${shortId}`;
-
-  // Store in memory
-  urlDatabase.set(shortId, {
-    longUrl,
-    createdAt: new Date().toISOString(),
-    visits: 0,
-    visitLogs: []
-  });
-
+  const { shortUrl, shortId } = createShortUrl(longUrl);
   res.json({ shortUrl, shortId });
 };
 
-// Decode logic
+// Decode 
 exports.decode = (req, res) => {
   const { shortUrl } = req.body;
 
@@ -36,62 +30,34 @@ exports.decode = (req, res) => {
     return res.status(400).json({ error: 'Invalid URL format' });
   }
 
-  // Extract shortId from the full short URL
-  const shortId = shortUrl.split('/').pop();
-  if (!shortId) {
-    return res.status(400).json({ error: 'Short ID missing from URL' });
-  }
-
-  // Retrieve from memory
-  const entry = urlDatabase.get(shortId);
-  if (!entry) {
+  const longUrl = findLongUrlFromShort(shortUrl);
+  if (!longUrl) {
     return res.status(404).json({ error: 'Short URL not found' });
   }
 
-  res.json({ longUrl: entry.longUrl });
+  res.json({ longUrl });
 };
 
-
-// Redirect Logic
+// Redirect 
 exports.redirect = (req, res) => {
   const { shortId } = req.params;
-  const entry = urlDatabase.get(shortId);
+  const userAgent = req.headers['user-agent'] || 'Unknown';
 
+  const entry = getRedirectEntry(shortId, userAgent);
   if (!entry) {
     return res.status(404).send('URL not found');
   }
 
-  const userAgent = req.headers['user-agent'] || 'Unknown';
-
-  // Increment visit and log browser info
-  entry.visits += 1;
-  entry.visitLogs.push({
-    timestamp: new Date().toISOString(),
-    browser: userAgent
-  });
-
   res.redirect(entry.longUrl);
 };
 
-// Listing Logic
+// Listing 
 exports.listUrls = (req, res) => {
-  const results = [];
-
-  urlDatabase.forEach((value, key) => {
-    results.push({
-      shortId: key,
-      longUrl: value.longUrl,
-      createdAt: value.createdAt,
-      visits: value.visits,
-      shortUrl: `${BASE_URL}/${key}`, // use BASE_URL
-      visitLogs: value.visitLogs
-    });
-  });
-
+  const results = getAllUrls();
   res.json(results);
 };
 
-// Search logic
+// Search 
 exports.searchUrls = (req, res) => {
   const { query } = req.query;
 
@@ -99,19 +65,7 @@ exports.searchUrls = (req, res) => {
     return res.status(400).json({ error: 'Search query is required' });
   }
 
-  const results = [];
-  urlDatabase.forEach((value, key) => {
-    if (value.longUrl.includes(query) || key.includes(query)) {
-      results.push({
-        shortId: key,
-        longUrl: value.longUrl,
-        createdAt: value.createdAt,
-        visits: value.visits,
-        shortUrl: `${BASE_URL}/${key}`,
-        visitLogs: value.visitLogs,
-      });
-    }
-  });
+  const results = searchUrls(query);
 
   if (results.length === 0) {
     return res.status(404).json({ message: 'No matching URLs found' });
@@ -120,21 +74,14 @@ exports.searchUrls = (req, res) => {
   res.json(results);
 };
 
-// Statistics logic
+// Statistics 
 exports.getUrlStats = (req, res) => {
   const { shortId } = req.params;
 
-  const entry = urlDatabase.get(shortId);
-
-  if (!entry) {
+  const stats = getStatsById(shortId);
+  if (!stats) {
     return res.status(404).json({ error: 'Short URL not found' });
   }
 
-  res.json({
-    shortId,
-    longUrl: entry.longUrl,
-    visits: entry.visits,
-    createdAt: entry.createdAt,
-  });
+  res.json(stats);
 };
-
