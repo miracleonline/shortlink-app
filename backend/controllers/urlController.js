@@ -108,6 +108,7 @@ exports.searchUrls = (req, res) => {
         createdAt: value.createdAt,
         visits: value.visits,
         shortUrl: `${BASE_URL}/${key}`,
+        visitLogs: value.visitLogs,
       });
     }
   });
