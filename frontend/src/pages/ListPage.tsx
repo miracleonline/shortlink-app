@@ -2,8 +2,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
-  Box, Grid, Card, CardContent, Typography, TextField, Button, Modal
+  Box, Card, CardContent, Typography, TextField, Button, Modal
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
 
 
 // Visit Log Type safety
@@ -33,8 +34,8 @@ const ListPage = () => {
     const fetchData = async () => {
       try {
         const endpoint = search
-          ? `http://localhost:5000/api/search?query=${encodeURIComponent(search)}`
-          : 'http://localhost:5000/api/list';
+          ? `https://indicinashortlinkassessment-production.up.railway.app/api/search?query=${encodeURIComponent(search)}`
+          : 'https://indicinashortlinkassessment-production.up.railway.app/api/list';
 
         const res = await axios.get(endpoint);
         setData(res.data);
@@ -48,7 +49,7 @@ const ListPage = () => {
 
   const decodeUrl = async (shortUrl: string) => {
     try {
-      const res = await axios.post('http://localhost:5000/api/decode', { shortUrl });
+      const res = await axios.post('https://indicinashortlinkassessment-production.up.railway.app/api/decode', { shortUrl });
       setDecodedUrl(res.data.longUrl);
       setOpen(true);
     } catch (err) {
@@ -71,7 +72,7 @@ const ListPage = () => {
 
       <Grid container spacing={2}>
         {data.map((entry) => (
-          <Grid item xs={12} md={6} lg={4} key={entry.shortId}>
+          <Grid item={true} xs={12} md={6} lg={4} key={entry.shortId}>
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>

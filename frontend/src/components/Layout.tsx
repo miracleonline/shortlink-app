@@ -1,6 +1,6 @@
 import {
   AppBar, Drawer, Toolbar, Typography, IconButton, List, ListItem,
-  ListItemText, CssBaseline, useMediaQuery, Box
+  ListItemText, ListItemButton, CssBaseline, useMediaQuery, Box
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from 'react';
@@ -16,11 +16,16 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   const drawerContent = (
     <List>
-      <ListItem button component={Link} to="/" onClick={() => setMobileOpen(false)}>
-        <ListItemText primary="Home" />
+      <ListItem disablePadding>
+        <ListItemButton component={Link} to="/" onClick={() => setMobileOpen(false)}>
+          <ListItemText primary="Home" />
+        </ListItemButton>
       </ListItem>
-      <ListItem button component={Link} to="/list" onClick={() => setMobileOpen(false)}>
-        <ListItemText primary="List" />
+
+      <ListItem disablePadding>
+        <ListItemButton component={Link} to="/list" onClick={() => setMobileOpen(false)}>
+          <ListItemText primary="List" />
+        </ListItemButton>
       </ListItem>
     </List>
   );
