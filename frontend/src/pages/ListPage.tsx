@@ -4,7 +4,7 @@ import axios from 'axios';
 import {
   Box, Card, CardContent, Typography, TextField, Button, Modal
 } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 
 
 // Visit Log Type safety
@@ -72,7 +72,7 @@ const ListPage = () => {
 
       <Grid container spacing={2}>
         {data.map((entry) => (
-          <Grid xs={12} md={6} lg={4} key={entry.shortId}>
+          <Grid {...{ item: true, xs: 12, md: 6, lg: 4 }} key={entry.shortId}>
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
