@@ -26,7 +26,7 @@ const Home = () => {
           fontWeight="bold"
           gutterBottom
         >
-          ShortLink
+          ShortLink App
         </Typography>
         <Typography
           variant="subtitle1"
