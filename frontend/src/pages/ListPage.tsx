@@ -72,7 +72,7 @@ const ListPage = () => {
 
       <Grid container spacing={2}>
         {data.map((entry) => (
-          <Grid item xs={12} md={6} lg={4} key={entry.shortId}>
+          <Grid item component="div" xs={12} md={6} lg={4} key={entry.shortId}>
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
