@@ -33,7 +33,7 @@ const Home = () => {
           color="textSecondary"
           sx={{ maxWidth: 600 }}
         >
-          Indicina ShortLink: shorten your long URLs into clean short links.
+          ShortLink App: shorten your long URLs into clean short links.
         </Typography>
         <Box sx={{ width: '100%', maxWidth: 600 }}>
           <ShortenForm />

@@ -45,6 +45,9 @@ const ListPage = () => {
     };
 
     fetchData();
+
+    const interval = setInterval(fetchData, 5000); // 5 seconds refresh
+    return () => clearInterval(interval);
   }, [search]);
 
   const decodeUrl = async (shortUrl: string) => {

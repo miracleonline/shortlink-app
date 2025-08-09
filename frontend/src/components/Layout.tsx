@@ -4,7 +4,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 
 const drawerWidth = 240;
@@ -13,17 +13,28 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const location = useLocation();
 
   const drawerContent = (
     <List>
       <ListItem disablePadding>
-        <ListItemButton component={Link} to="/" onClick={() => setMobileOpen(false)}>
+        <ListItemButton
+          component={Link}
+          to="/"
+          onClick={() => setMobileOpen(false)}
+          selected={location.pathname === '/'}
+        >
           <ListItemText primary="Home" />
         </ListItemButton>
       </ListItem>
 
       <ListItem disablePadding>
-        <ListItemButton component={Link} to="/list" onClick={() => setMobileOpen(false)}>
+        <ListItemButton
+          component={Link}
+          to="/list"
+          onClick={() => setMobileOpen(false)}
+          selected={location.pathname === '/list'}
+        >
           <ListItemText primary="List" />
         </ListItemButton>
       </ListItem>
@@ -46,7 +57,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             </IconButton>
           )}
           <Typography variant="h6" noWrap component="div">
-            Indicina ShortLink
+            ShortLink App
           </Typography>
         </Toolbar>
       </AppBar>
