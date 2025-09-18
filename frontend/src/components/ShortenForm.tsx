@@ -6,6 +6,10 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
+type ApiErrorResponse = {
+  error: string;
+};
+
 // State management
 const ShortenForm = () => {
   const [longUrl, setLongUrl] = useState('');
@@ -24,6 +28,7 @@ const ShortenForm = () => {
       setShortUrl(res.data.shortUrl);
       setOpen(true);
     } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
       console.error('Axios Error:', err);               // Full error object
       console.error('Response Data:', err.response?.data); // Actual backend response
 
