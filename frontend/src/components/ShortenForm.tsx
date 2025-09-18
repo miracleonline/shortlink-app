@@ -29,16 +29,19 @@ const ShortenForm = () => {
       setOpen(true);
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
-      console.error('Axios Error:', err);               // Full error object
-      console.error('Response Data:', err.response?.data); // Actual backend response
+      console.error('Axios Error:', axiosError);
+      console.error('Response Data:', axiosError.response?.data);
 
-      if (err.response && err.response.data && err.response.data.error) {
-        setError(err.response.data.error);
+      if (axiosError.response?.data?.error) {
+        setError(axiosError.response.data.error);
       } else {
         setError('Failed to shorten URL. Please try again.');
       }
-    }  
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   return (
     <>
