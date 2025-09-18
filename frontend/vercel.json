@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/:shortId",
-      "destination": "/api/redirect/:shortId"
+      "destination": "https://shortlink-app-u4vy.onrender.com/:shortId"
     }
   ]
 }
