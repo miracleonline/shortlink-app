@@ -1,6 +1,6 @@
 // Imports
 import { useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import {
   Button, TextField, CircularProgress, Modal, Box, Typography
 } from '@mui/material';
