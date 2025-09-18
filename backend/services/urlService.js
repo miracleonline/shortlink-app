@@ -69,9 +69,13 @@ function getAllUrls() {
 // Search Logic
 function searchUrls(query) {
   const results = [];
+  const lowerQuery = query.toLowerCase();
 
   urlDatabase.forEach((value, key) => {
-    if (value.longUrl.includes(query) || key.includes(query)) {
+    if (
+      value.longUrl.toLowerCase().includes(lowerQuery) ||
+      key.toLowerCase().includes(lowerQuery)
+    ) {
       results.push({
         shortId: key,
         longUrl: value.longUrl,

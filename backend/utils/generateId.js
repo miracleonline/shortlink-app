@@ -2,8 +2,8 @@
 const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
 // Generate ID
-function generateId(length = 6) {
-  let result = '';
+function generateId(length = 4) {
+  let result = 'medi-';
   for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * characters.length));
   }
