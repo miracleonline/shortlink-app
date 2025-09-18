@@ -17,7 +17,7 @@ exports.encode = (req, res) => {
     return res.status(400).json({ error: 'Invalid URL' });
   }
 
-  const urlRegex = /^(https?:\/\/)?([a-z0-9]+[.-])*[a-z0-9]+\.[a-z]{2,6}(\/[^\s]*)?$/i;
+  const urlRegex = /^(https?:\/\/)([a-z0-9]+[.-])*[a-z0-9]+\.[a-z]{2,6}(\/[^\s]*)?$/i;
 
   if (!urlRegex.test(longUrl)) {
     return res.status(400).json({ error: 'Invalid URL please enter a valid url e.g https://google.com' });
