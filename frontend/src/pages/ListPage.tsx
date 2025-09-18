@@ -34,8 +34,8 @@ const ListPage = () => {
     const fetchData = async () => {
       try {
         const endpoint = search
-          ? `https://indicinashortlinkassessment-production.up.railway.app/api/search?query=${encodeURIComponent(search)}`
-          : 'https://indicinashortlinkassessment-production.up.railway.app/api/list';
+          ? `https://shortlink-app-u4vy.onrender.com/api/search?query=${encodeURIComponent(search)}`
+          : 'https://shortlink-app-u4vy.onrender.com/api/list';
 
         const res = await axios.get(endpoint);
         setData(res.data);
@@ -52,7 +52,7 @@ const ListPage = () => {
 
   const decodeUrl = async (shortUrl: string) => {
     try {
-      const res = await axios.post('https://indicinashortlinkassessment-production.up.railway.app/api/decode', { shortUrl });
+      const res = await axios.post('https://shortlink-app-u4vy.onrender.com/api/decode', { shortUrl });
       setDecodedUrl(res.data.longUrl);
       setOpen(true);
     } catch (err) {

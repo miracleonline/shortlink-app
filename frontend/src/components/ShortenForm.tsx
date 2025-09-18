@@ -20,7 +20,7 @@ const ShortenForm = () => {
     setLoading(true);
     setError('');
     try {
-      const res = await axios.post('https://indicinashortlinkassessment-production.up.railway.app/api/encode', { longUrl });
+      const res = await axios.post('https://shortlink-app-u4vy.onrender.com/api/encode', { longUrl });
       setShortUrl(res.data.shortUrl);
       setOpen(true);
     } catch (err) {
