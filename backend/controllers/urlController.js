@@ -23,13 +23,6 @@ exports.encode = (req, res) => {
     return res.status(400).json({ error: 'Invalid URL please enter a valid url e.g https://google.com' });
   }
 
-
-  try {
-    new URL(longUrl); 
-  } catch (e) {
-    return res.status(400).json({ error: 'Invalid URL' });
-  }
-
   const { shortUrl, shortId } = createShortUrl(longUrl);
   res.json({ shortUrl, shortId });
 };

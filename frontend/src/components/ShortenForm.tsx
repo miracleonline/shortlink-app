@@ -1,14 +1,10 @@
 // Imports
 import { useState } from 'react';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import {
   Button, TextField, CircularProgress, Modal, Box, Typography
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-
-type ApiErrorResponse = {
-  error: string;
-};
 
 // State management
 const ShortenForm = () => {
@@ -28,12 +24,8 @@ const ShortenForm = () => {
       setShortUrl(res.data.shortUrl);
       setOpen(true);
     } catch (err) {
-      const axiosError = err as AxiosError<ApiErrorResponse>;
-      console.error('Axios Error:', axiosError);
-      console.error('Response Data:', axiosError.response?.data);
-
-      if (axiosError.response?.data?.error) {
-        setError(axiosError.response.data.error);
+      if (err.response && err.response.data && err.response.data.error) {
+        setError(err.response.data.error);
       } else {
         setError('Failed to shorten URL. Please try again.');
       }
@@ -41,7 +33,6 @@ const ShortenForm = () => {
       setLoading(false);
     }
   };
-
 
   return (
     <>
