@@ -79,7 +79,7 @@ const ListPage = () => {
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  <a href={entry.shortUrl} target="_blank" rel="noopener noreferrer">{entry.shortUrl}</a>
+                  <a href={entry.shortUrl} target="_blank" rel="noopener noreferrer">{entry.shortId}</a>
                 </Typography>
                 <Typography variant="body2">Original: {entry.longUrl}</Typography>
                 <Typography variant="body2">Created: {new Date(entry.createdAt).toLocaleString()}</Typography>
