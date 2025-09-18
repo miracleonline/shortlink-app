@@ -2,7 +2,17 @@
   "rewrites": [
     {
       "source": "/:shortId",
+      "has": [
+        {
+          "type": "host",
+          "value": "short.domain.com"
+        }
+      ],
       "destination": "https://shortlink-app-u4vy.onrender.com/:shortId"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
