@@ -24,7 +24,11 @@ const ShortenForm = () => {
       setShortUrl(res.data.shortUrl);
       setOpen(true);
     } catch (err) {
-      setError('Failed to shorten URL');
+      if (err.response && err.response.data && err.response.data.error) {
+        setError(err.response.data.error);
+      } else {
+        setError('Failed to shorten URL. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
