@@ -32,7 +32,8 @@ const ShortenForm = () => {
       } else {
         setError('Failed to shorten URL. Please try again.');
       }
-    };
+    }  
+  };
 
   return (
     <>
