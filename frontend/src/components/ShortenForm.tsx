@@ -24,15 +24,15 @@ const ShortenForm = () => {
       setShortUrl(res.data.shortUrl);
       setOpen(true);
     } catch (err) {
+      console.error('Axios Error:', err);               // Full error object
+      console.error('Response Data:', err.response?.data); // Actual backend response
+
       if (err.response && err.response.data && err.response.data.error) {
         setError(err.response.data.error);
       } else {
         setError('Failed to shorten URL. Please try again.');
       }
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
   return (
     <>
