@@ -17,21 +17,27 @@ const ShortenForm = () => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState(''); 
   const [timer, setTimer] = useState(5); 
-  const [timerActive, setTimerActive] = useState(false); 
+  const [timerActive, setTimerActive] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false); 
   const navigate = useNavigate();
 
   // API call
   const handleShorten = async () => {
     setLoading(true);
     setError('');
-    setMessage('Service starting in a few seconds...'); 
-    setTimer(30); 
-    setTimerActive(true); 
+
+    if (!hasStarted) {
+      setMessage('Service starting in a few seconds...');
+      setTimer(30);
+      setTimerActive(true);
+      setHasStarted(true); 
+    }
+
     try {
       const res = await axios.post('https://shortlink-app-u4vy.onrender.com/api/encode', { longUrl });
       setShortUrl(res.data.shortUrl);
       setOpen(true);
-      setMessage('Service started, thanks for waiting! Test the app now.'); 
+      setMessage('Service started, thanks for waiting! Test the app now.');
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       console.error('Axios Error:', axiosError);
@@ -42,7 +48,7 @@ const ShortenForm = () => {
       } else {
         setError('Failed to shorten URL. Please try again.');
       }
-      setTimerActive(false); 
+      setTimerActive(false);
     } finally {
       setLoading(false);
     }
@@ -87,7 +93,7 @@ const ShortenForm = () => {
         <TextField
           fullWidth
           variant="outlined"
-          label="Enter a long URL"
+          label="Enter URL"
           value={longUrl}
           onChange={(e) => setLongUrl(e.target.value)}
           sx={{ mb: 2 }}
