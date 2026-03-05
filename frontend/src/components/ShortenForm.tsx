@@ -1,5 +1,4 @@
-// Imports
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios, { AxiosError } from 'axios';
 import {
   Button, TextField, CircularProgress, Modal, Box, Typography
@@ -10,23 +9,29 @@ type ApiErrorResponse = {
   error: string;
 };
 
-// State management
 const ShortenForm = () => {
   const [longUrl, setLongUrl] = useState('');
   const [shortUrl, setShortUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState(''); 
+  const [timer, setTimer] = useState(5); 
+  const [timerActive, setTimerActive] = useState(false); 
   const navigate = useNavigate();
 
   // API call
   const handleShorten = async () => {
     setLoading(true);
     setError('');
+    setMessage('Service starting in a few seconds...'); 
+    setTimer(30); 
+    setTimerActive(true); 
     try {
       const res = await axios.post('https://shortlink-app-u4vy.onrender.com/api/encode', { longUrl });
       setShortUrl(res.data.shortUrl);
       setOpen(true);
+      setMessage('Service started, thanks for waiting! Test the app now.'); 
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       console.error('Axios Error:', axiosError);
@@ -37,11 +42,28 @@ const ShortenForm = () => {
       } else {
         setError('Failed to shorten URL. Please try again.');
       }
+      setTimerActive(false); 
     } finally {
       setLoading(false);
     }
   };
 
+  // Timer countdown effect
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (timerActive && timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev - 1); 
+        if (timer === 15) {
+          setMessage('Almost there!'); 
+        }
+      }, 1000);
+    } else if (timer === 0) {
+      clearInterval(interval);
+    }
+
+    return () => clearInterval(interval); 
+  }, [timerActive, timer]);
 
   return (
     <>
@@ -56,6 +78,10 @@ const ShortenForm = () => {
           alignItems: 'center',
         }}
       >
+        <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
+          This project is deployed on Render. The delay is due to the free plan's cold start, which typically takes a few seconds to initialize.
+        </Typography>
+        
         <TextField
           fullWidth
           variant="outlined"
@@ -70,6 +96,11 @@ const ShortenForm = () => {
         {error && (
           <Typography color="error" sx={{ mt: 2 }}>
             {error}
+          </Typography>
+        )}
+        {message && !loading && (
+          <Typography sx={{ mt: 2 }}>
+            {message}
           </Typography>
         )}
       </Box>
