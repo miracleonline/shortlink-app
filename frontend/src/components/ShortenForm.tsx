@@ -50,7 +50,7 @@ const ShortenForm = () => {
 
   // Timer countdown effect
   useEffect(() => {
-    let interval: ReturnType<typeof setInterval>;
+    let interval: ReturnType<typeof setInterval> | undefined;
     if (timerActive && timer > 0) {
       interval = setInterval(() => {
         setTimer((prev) => prev - 1); 
@@ -59,7 +59,7 @@ const ShortenForm = () => {
         }
       }, 1000);
     } else if (timer === 0) {
-      clearInterval(interval);
+      if (interval) clearInterval(interval);
     }
 
     return () => clearInterval(interval); 
