@@ -69,6 +69,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           open={mobileOpen}
           onClose={() => setMobileOpen(false)}
           ModalProps={{ keepMounted: true }}
+          sx={{
+            width: '300px',
+            flexShrink: 0,
+            '& .MuiDrawer-paper': { 
+              width: '300px', 
+              boxSizing: 'border-box'
+            },
+          }}
         >
           <Toolbar />
           {drawerContent}
