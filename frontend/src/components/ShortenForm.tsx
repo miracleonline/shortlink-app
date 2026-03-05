@@ -50,20 +50,22 @@ const ShortenForm = () => {
 
   // Timer countdown effect
   useEffect(() => {
-    let interval: ReturnType<typeof setInterval> | undefined;
-    if (timerActive && timer > 0) {
-      interval = setInterval(() => {
-        setTimer((prev) => prev - 1); 
-        if (timer === 15) {
-          setMessage('Almost there!'); 
-        }
-      }, 1000);
-    } else if (timer === 0) {
-      if (interval) clearInterval(interval);
-    }
+    if (!timerActive) return;
 
-    return () => clearInterval(interval); 
-  }, [timerActive, timer]);
+    const interval = setInterval(() => {
+      setTimer(prev => {
+        if (prev === 15) {
+          setMessage('Almost there!');
+        }
+        if (prev <= 1) {
+          clearInterval(interval);
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timerActive]);
 
   return (
     <>
@@ -98,9 +100,9 @@ const ShortenForm = () => {
             {error}
           </Typography>
         )}
-        {message && !loading && (
+        {message && (
           <Typography sx={{ mt: 2 }}>
-            {message}
+            {message} {timer > 0 && `(${timer}s)`}
           </Typography>
         )}
       </Box>
