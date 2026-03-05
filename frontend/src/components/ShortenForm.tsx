@@ -50,7 +50,7 @@ const ShortenForm = () => {
 
   // Timer countdown effect
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (timerActive && timer > 0) {
       interval = setInterval(() => {
         setTimer((prev) => prev - 1); 
@@ -81,7 +81,7 @@ const ShortenForm = () => {
         <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
           This project is deployed on Render. The delay is due to the free plan's cold start, which typically takes a few seconds to initialize.
         </Typography>
-        
+
         <TextField
           fullWidth
           variant="outlined"
