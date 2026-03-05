@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 
-const drawerWidth = 400;
+const drawerWidth = 240;
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
