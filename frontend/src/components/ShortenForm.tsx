@@ -36,11 +36,15 @@ const ShortenForm = () => {
     try {
       const res = await axios.post('https://shortlink-app-u4vy.onrender.com/api/encode', { longUrl });
       setShortUrl(res.data.shortId);
+
+      setTimerActive(false);
+      setMessage('Service ready!');
+      setTimeout(() => setMessage(''), 1500);
       setOpen(true);
-      if (!hasStarted) {
-        setMessage('Service started, thanks for waiting! Test the app now.');
-        setTimerActive(false);
-      }
+      // if (!hasStarted) {
+      //   setMessage('Service started, thanks for waiting! Test the app now.');
+      //   setTimerActive(false);
+      // }
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       console.error('Axios Error:', axiosError);
@@ -52,6 +56,7 @@ const ShortenForm = () => {
         setError('Failed to shorten URL. Please try again.');
       }
       setTimerActive(false);
+      setMessage('');
     } finally {
       setLoading(false);
     }
