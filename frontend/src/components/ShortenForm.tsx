@@ -28,7 +28,7 @@ const ShortenForm = () => {
 
     if (!hasStarted) {
       setMessage('Service starting in a few seconds...');
-      setTimer(30);
+      setTimer(34);
       setTimerActive(true);
       setHasStarted(true); 
     }

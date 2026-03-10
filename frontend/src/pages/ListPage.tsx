@@ -67,7 +67,7 @@ const ListPage = () => {
       <TextField
         fullWidth
         variant="outlined"
-        label="Search URLs (Live filtering: start typing either short or long links to filter results)"
+        label="Search URLs (Live filtering: start typing to filter results)"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         sx={{ mb: 3 }}

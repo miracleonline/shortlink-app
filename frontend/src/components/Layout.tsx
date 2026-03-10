@@ -35,7 +35,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           onClick={() => setMobileOpen(false)}
           selected={location.pathname === '/list'}
         >
-          <ListItemText primary="List" />
+          <ListItemText primary="Links" />
         </ListItemButton>
       </ListItem>
     </List>
